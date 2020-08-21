@@ -38,7 +38,7 @@ router.post("/signup", function(req, res) {
 
   var jsonData = JSON.stringify(data);
 
-  const url = "https://ims-heroku-backend.herokuapp.com/employees";
+  const url = "https://ims-backend-mongodb.herokuapp.com/employees";
 
   var options = {
     method: 'POST',
