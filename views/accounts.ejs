@@ -1,0 +1,156 @@
+<%- include("partials/header") -%>
+<div class="container">
+  <div class="box-top">
+    <!-- Register Customer -->
+    <div class="row">
+      <div class="col-sm-4">
+        <ul>
+          <li>
+            <h3 class="user">Register Customer</h3>
+          </li>
+        </ul>
+      </div>
+      <div class="col-sm-8">
+        <ul>
+          <li>
+            <h2 class="error"><%= accountMessage %></h2>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <form action="/register/customer/<%= registerId %>" method="post">
+      <div class="row">
+        <div class="col-sm-3">
+          <ul>
+            <li>
+              <label for="">First Name</label>
+              <br>
+              <input class="text-input" type="text" name="customerFirstName">
+              <br><br>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-sm-3">
+          <ul>
+            <li>
+              <label for="">Last Name</label>
+              <br>
+              <input class="text-input" type="text" name="customerLastName">
+              <br><br>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-sm-3">
+          <ul>
+            <li>
+              <label for="">User Name</label>
+              <br>
+              <input class="text-input" type="text" name="customerId">
+              <br><br>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="col-sm-3">
+          <ul>
+            <li>
+              <label for="">Phone Number</label>
+              <br>
+              <input class="text-input" type="text" name="phoneNumber">
+              <br><br>
+            </li>
+            <li>
+              <button type="submit" class="add-button" name="button">
+                REGISTER</button>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </form>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <!-- login -->
+      <div class="box">
+        <form class="input-form" action="/login/customer/<%= customerLoginId %>" method="post">
+          <ul>
+            <li>
+              <label class="user-name"> <%= customerName %> </label>
+            </li>
+            <li>
+              <h3 class="user">Customer Details</h3>
+            </li>
+            <li>
+              <label for="">User Name</label>
+              <br>
+              <input class="text-input" type="text" name="userName" value="" placeholder="">
+              <br><br>
+            </li>
+
+            <li>
+              <button type="submit" class="update-button" name="button">
+                LOGIN</button>
+              <button type="submit" class="delete-button" formaction="/logout/customer/<%= customerLogoutId %>">LOGOUT</button>
+            </li>
+          </ul>
+        </form>
+
+      </div>
+
+    </div>
+    <div class="col-md-8">
+      <div class="">
+        <h3 class="transactions">Transactions</h3>
+        <form class="transactions" action="/add/transaction/<%= employeeId %>/<%= customerUserName %>" method="post">
+          <button type="submit" class="add-transaction" name="button">+</button>
+        </form>
+        <h3 class="transactions">Total Amount Left :</h3>
+        <label class="transactions total-amount" for=""><%= totalAmount %></label>
+      </div>
+      <table id="product-table" class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+            <th>Date</th>
+            <th>Total Amount</th>
+            <th>Amount Paid</th>
+            <th>Amount Left</th>
+            <th style="display:none;">Transaction ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (transactions != null) { %>
+          <% for (var i = transactions.length - 1; i >= 0; i--) { %>
+          <% let date = transactions[i].date %>
+          <% let totalAmount = transactions[i].totalAmount %>
+          <% let amountPaid = transactions[i].amountPaid %>
+          <% let amountUnpaid = transactions[i].amountUnpaid %>
+          <% let transactionId = transactions[i].transactionId %>
+          <tr>
+            <td><a href="/get/transaction/<%= customerUserName %>/<%= etid %>/<%= transactionId  %>"><button type="button" name="button">open</button></a></td>
+            <td><a class="error" href="/delete/transaction/<%= etid %>/<%= transactionId  %>"><button type="button" name="button">delete</button></a></td>
+            <td><%= date %></td>
+            <td><%= totalAmount %></td>
+            <td><%= amountPaid %></td>
+            <td><%= amountUnpaid %></td>
+            <td style="display:none;"><%= transactionId  %></td>
+          </tr>
+          <% } %>
+          <% } %>
+
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%- include("partials/footer") -%>

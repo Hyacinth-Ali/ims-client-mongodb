@@ -1,0 +1,263 @@
+ 
+body {
+  background-color: rgb(56, 111, 227) !important;
+  -webkit-print-color-adjust: exact !important;
+  background-image: -webkit-linear-gradient(65deg, #A683E3 50%, #E4E9FD 50%);
+  min-height: 1000px;
+  font-family: 'helvetica neue';
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+h1, h3{
+  color: #A683E3;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+button {
+	display: none;
+}
+
+.update-button {
+	box-shadow: 0 10px 14px -7px #276873;
+	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+	background-color:#599bb3;
+	border-radius:8px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:14px;
+	font-weight:bold;
+	padding:7px 12px;
+	text-decoration:none;
+	text-shadow:0 1px 0 #3d768a;
+}
+.update-button:hover {
+	background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+	background-color:#408c99;
+}
+.update-button:active {
+	position:relative;
+	top:1px;
+}
+
+.delete-button {
+	box-shadow:inset 0 1px 0 0 #cf866c;
+	background:linear-gradient(to bottom, #d0451b 5%, #bc3315 100%);
+	background-color:#d0451b;
+	border-radius:3px;
+	border:1px solid #942911;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:13px;
+	padding:6px 16px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #854629;
+}
+.delte-button:hover {
+	background:linear-gradient(to bottom, #bc3315 5%, #d0451b 100%);
+	background-color:#bc3315;
+}
+.delte-button:active {
+	position:relative;
+	top:1px;
+}
+
+
+.add-button {
+	display: none;
+	box-shadow: 0 10px 14px -7px #276873;
+	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+	background-color:#599bb3;
+	border-radius:8px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:4px 19px;
+	text-decoration:none;
+	text-shadow:0 1px 0 #3d768a;
+}
+.add-button:hover {
+	background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+	background-color:#408c99;
+}
+.add-button:active {
+	position:relative;
+	top:1px;
+}
+
+.user-name {
+  color: #5e3737;
+  font-size: 2rem;
+}
+
+.get-products {
+	box-shadow:inset 0px 1px 3px 0px #91b8b3;
+	background:linear-gradient(to bottom, #768d87 5%, #6c7c7c 100%);
+	background-color:#768d87;
+	border-radius:5px;
+	border:1px solid #566963;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	padding:3px 12px;
+	text-decoration:none;
+	text-shadow:0px -1px 0px #2b665e;
+}
+.get-products:hover {
+	background:linear-gradient(to bottom, #6c7c7c 5%, #768d87 100%);
+	background-color:#6c7c7c;
+}
+.get-products:active {
+	position:relative;
+	top:1px;
+}
+
+.error {
+  color: red;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.vitalis-image {
+	/* border-radius: 100%; */
+  	text-align: center;
+  	margin: auto;
+  	width: 70%;
+  	padding-bottom: 12rem;
+  	padding-top: 1rem;
+}
+
+.carousel-inner {
+	height: 50rem;
+}
+
+
+.navbar {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border: 0;
+    border-radius: 0;
+    margin-bottom: 0;
+    font-size: 12px;
+    letter-spacing: 5px;
+}
+
+.navbar-nav  li a:hover {
+    color: #1abc9c !important;
+}
+
+.navbar-default .navbar-nav li a {
+	/* color: #0dd3c5; */
+	color: #006666;
+	font-size: 1.8rem;
+}
+
+.navbar-default .navbar-brand {
+	color: #7b9932;
+	font-size: 3rem;
+	font-style: italic;
+}
+
+.box {
+  max-width: 400px;
+  margin: 10px auto;
+  background: #E4E9FD;
+  box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+
+  padding: 1em;
+  border: 1px solid #CCC;
+  border-radius: 1em;
+}
+
+.box-transaction {
+  margin: 3px auto;
+  background: #E4E9FD;
+  box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+
+  padding: 1em;
+  border: 1px solid #CCC;
+  border-radius: 1em;
+}
+
+.box-top {
+  /* max-width: 1200px; */
+  margin: 5px auto;
+  background: #E4E9FD;
+  box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+
+  padding: 0.6em;
+  border: 1px solid #CCC;
+  border-radius: 0.5em;
+}
+
+.table {
+  margin: 10px auto;
+  background: #E4E9FD;
+  padding: 1em;
+  border: 1px solid #CCC;
+  border-radius: 1em;
+}
+
+.add-transaction {
+  min-height: 20px;
+  border-radius: 50%;
+  margin-right: 15px;
+  border-color: transparent;
+  background-color: #A683E3;
+  color: #fff;
+  font-size: 20px;
+  border-width: 0;
+  display: inline;
+}
+
+.transactions {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.total-amount {
+  font-size: 2rem;
+}
+
+.col-md-5 {
+	display: none;
+  	margin-top: 5px;
+}
+
+.product-transaction {
+  border: 1px solid #CCC;
+}
+
+.navbar-default {
+	background-color: #d3d2d4;
+	color: #f5f5f5;
+}
+
+.header{
+  color: blue;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.print-hide {
+	color: red;
+	display: none;
+}
+
+.carousel-item {
+  padding: 7% 15%;
+}

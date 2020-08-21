@@ -1,0 +1,160 @@
+<%- include("partials/header") -%>
+
+<div class="container">
+  <div class="row tranaction-top">
+    <div class="col-md-5">
+    <!-- Add Product -->
+      <div class="box-transaction">
+        <form class="" action="/add/product/<%= transactionId %>/<%= employeeId %>/<%= customerUserName %>" method="post">
+          <ul>
+            <li>
+              <h3 class="user">Add Product</h3>
+            </li>
+            <li>
+              <label for="products">Choose a Product:</label><br>
+              <!-- <label for="">Unit Price</label> -->
+              <select id="products" name="productName">
+                <option value="" selected></option>
+                <% if (products != null) { %>
+                <% for (var i = 0; i < products.length; i++) { %>
+                <% let name = products[i].name %>
+                <option value="<%= name %>"><%= name %></option>
+                <% } %>
+                <% } %>
+
+              </select>
+            </li>
+            <li>
+              <br><label for="">Quantity</label><br>
+              <input class="text-input" type="text" name="productQuantity" value="" placeholder=""><br><br>
+            </li>
+            <li>
+              <button type="submit" class="update-button" name="button">
+                ADD</button>
+            </li>
+          </ul>
+        </form>
+      </div>
+	<!-- Update Product -->
+      <div class="box-transaction">
+        <form class="" action="/update/product/<%= transactionId %>/<%= employeeId %>/<%= customerUserName %>" method="post">
+        	<ul>
+          <li>
+            <h3 class="user">Update Product</h3>
+          </li>
+          <li>
+            <label for="products">Choose a Product:</label><br>
+            <select id="products" name="productName">
+              <option value="" selected></option>
+              <% if (pTransactions != null) { %>
+              <% for (var i = 0; i < pTransactions.length; i++) { %>
+              <% let name = pTransactions[i].productName %>
+              <option value="<%= name %>"><%= name %></option>
+              <% } %>
+              <% } %>
+              </select>
+          </li>
+          <li>
+            <br><label for="">New Quantity</label><br>
+            <input class="text-input" type="text" name="productQuantity" value="" placeholder=""><br><br>
+          </li>
+          <li>
+            <button type="submit" class="update-button" name="button">
+              UPDATE</button>
+            <button type="submit" class="delete-button" formaction="/remove/product/<%= transactionId %>/<%= employeeId %>/<%= customerUserName %>">REMOVE</button>
+          </li>
+        </ul>
+        </form>
+      </div>
+    </div>
+
+    <!-- Transaction details which can be printed -->
+    <div class="col-md-7" id="print-content">
+      <div class="transaction-details">
+        <div class="header">
+          <h1>DE DON MOTORS CO. L.T.D</h1>
+          <h4>IN GOD WE TRUST</h4><br>
+          <div class="avata">
+            <p>SOLE AGENT OF AVATA SPECIAL QUALITY MOTORCYCLE/SPARE PARTS
+              AND DIAMONG TIRES/TUBES</p>
+              <p>(Head Office: Techiman, B/E Along Kintampo Road Before Toll Booth Tuobodom)</p>
+              <p>Box 120 TECHIMAN. B.E/R Ghana: Tel: 0243679200/0209380084/0553552147/0247832338</p>
+              <p>E-mail: dedon.motors@yahoo.com/dedonmotors@gmail.com</p>
+              <div class="">
+                <h5>Branches:</h5>
+              </div>
+          </div>
+
+          <div class="branch">
+            <table>
+              <tr>
+                <td>
+                  Wa: Along Wa Poly Road <br>
+                  Tel: 0244485813/0246017637
+              </td>
+              <td>
+                  Kumasi: AlabaFulani Chief House <br>
+                  Tel: 0551939054
+              </td>
+              <td>
+                  Bolga <br>
+                  Tel: 0209784545/0553818004
+              </td>
+              </tr>
+            </table>
+          </div>
+          <label class="error"><%= transactionMessage %></label>
+        </div>
+
+        <label for="">Customer Name:  <%= customerName %></label><br>
+        <label for="">Phone Number:  <%= phoneNumber %></label><br>
+        <label for="">Transaction Date: <%= transactionDate %></label><br>
+        <label for="">Total Amount: <%= totalAmount %></label><br>
+        <label for="">Amount Paid: <%= amountPaid %></label><br>
+        <label for="">Amount Left: <%= amountLeft %></label><br>
+        <form class="" action="/pay/<%= transactionId %>/<%= employeeId %>/<%= customerUserName %>" method="post">
+        	<div class="print-hide">
+        		<button class="add-button" type="submit" name="button">PAY</button>
+        	<input type="text" name="paidAmount" size="20" value="">
+        	</div>
+        </form>
+        <!-- <button type="button" name="button">PRINT</button> -->
+        <!-- <input type="button" onclick="printDiv('print-content')" value="print a div!"/> -->
+      </div>
+      <table id="product-table" class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (pTransactions != null) { %>
+          <% for (var i = 0; i < pTransactions.length; i++) { %>
+          <% let name = pTransactions[i].productName %>
+          <% let quantity = pTransactions[i].quantity %>
+          <% let amount = pTransactions[i].price %>
+          <% let unitPrice = amount / quantity %>
+          <tr onclick="getRowValues(this)">
+            <td><%= name %></td>
+            <td><%= unitPrice %></td>
+            <td><%= quantity %></td>
+            <td><%= amount %></td>
+          </tr>
+          <% } %>
+          <% } %>
+        </tbody>
+      </table>
+      <form action="/finalize/<%= transactionId %>/<%= employeeId %>/<%= customerUserName %>" method="post">
+      	<button type="submit" class="update-button print-hide" name="button">
+                FINALIZE</button>
+      </form>
+    </div>
+
+  </div>
+
+</div>
+
+<%- include("partials/footer") -%>

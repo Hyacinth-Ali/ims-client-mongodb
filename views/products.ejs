@@ -1,0 +1,135 @@
+<%- include("partials/header") -%>
+<div class="container">
+  <div class="box-top">
+    <!-- Add Products -->
+    <div class="row">
+      <div class="col-sm-4">
+        <ul>
+          <li>
+            <h3 class="user">Add Product</h3>
+          </li>
+        </ul>
+      </div>
+      <div class="col-sm-4">
+        <ul>
+          <li>
+            <h2 class="error"><%= productMessage %></h2>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <form class="" action="/add/product/<%= employeeId %>" method="post">
+      <div class="row">
+        <div class="col-sm-4">
+          <ul>
+            <li>
+              <label for="">Name</label>
+              <br>
+              <input class="text-input" type="text" name="productName">
+              <br><br>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-sm-4">
+          <ul>
+            <li>
+              <label for="">Quantity</label>
+              <br>
+              <input class="text-input" type="text" name="productQuantity">
+              <br><br>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-sm-4">
+          <ul>
+            <li>
+              <label for="">Price</label>
+              <br>
+              <input class="text-input" type="text" name="productPrice">
+              <br><br>
+              <button type="submit" class="add-button" name="button">
+                ADD</button>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </form>
+
+
+  </div>
+
+  <!-- Update products -->
+  <div class="row">
+    <div class="col-md-4">
+      <div class="box">
+        <form class="input-form" action="/update/product/<%= updateId %>" method="post">
+          <ul>
+            <li>
+              <h3 class="user">Update</h3>
+            </li>
+            <li>
+              <label for="">Name</label>
+              <br>
+              <input class="text-input" id="product-name" type="text" name="productName" value="">
+              <br><br>
+            </li>
+            <li>
+              <label for="">Price</label>
+              <br>
+              <input class="text-input" id="product-price" type="text" name="productPrice" value="">
+              <br><br>
+            </li>
+            <li>
+              <label for="">Initial Quantity</label>
+              <br>
+              <input class="text-input" id="product-quantity" type="text" name="productQuantity" value="">
+              <br><br>
+            </li>
+            <li>
+              <label for="">New Quantity</label>
+              <br>
+              <input class="text-input" type="text" name="newQuantity" value="">
+              <br><br>
+            </li>
+            <li>
+              <button type="submit" class="update-button" name="button">
+                UPDATE</button>
+              <button type="submit" class="delete-button" formaction="/delete/product/<%= updateId %>">DELETE</button>
+            </li>
+          </ul>
+        </form>
+
+      </div>
+    </div>
+    <div class="col-md-8">
+      <table id="product-table" class="table .table-striped">
+        <thead>
+          <tr>
+            <th type="button" onclick="sortTable(0)">Name</th>
+            <th onclick="sortTable(1)">Item Price</th>
+            <th onclick="sortTable(2)">Qauntity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (var i = 0; i < products.length; i++) { %>
+            <% let name = products[i].name %>
+            <% let price = products[i].itemPrice %>
+            <% let quantity = products[i].quantity %>
+            <tr onclick="getRowValues(this)">
+              <td><%= name %></td>
+              <td><%= price %></td>
+              <td><%= quantity %></td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%- include("partials/footer") -%>
