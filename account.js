@@ -96,7 +96,7 @@ function registerCustomer(req, res) {
 	  // convert the javascript object to JSON
 	  const jsonData = JSON.stringify(data);
 
-	  const url = "https://ims-heroku-backend.herokuapp.com/customers/" + employeeId;
+	  const url = "https://ims-backend-mongodb.herokuapp.com/customers/" + employeeId;
 
 	  var options = {
 	    method: 'POST',
@@ -141,7 +141,7 @@ function customerLogin(req, res) {
 	    // convert the javascript object to JSON
 	    const jsonData = JSON.stringify(data);
 
-	    const url = "https://ims-heroku-backend.herokuapp.com/customers/get/" + employeeId;
+	    const url = "https://ims-backend-mongodb.herokuapp.com/customers/get/" + employeeId;
 
 	    var options = {
 	      method: 'GET',
@@ -158,16 +158,16 @@ function customerLogin(req, res) {
 	        });
 	      } else {
 	        response.on("data", function(data) {
-	        	
+
 	        	// set customer user name
 	          let customerUserName = JSON.parse(data).userName;
 	          customerUserNames.set(employeeId, customerUserName);
-	          
+
 	          // set customer name
 	          let currentCustomerName = JSON.parse(data).firstName + " " +
 	          JSON.parse(data).lastName;
 	          customers.set(employeeId, currentCustomerName);
-	          
+
 	          // set Transactions
 	          let currentTransactions = JSON.parse(data).transactions;
 	          let totalAmount = 0;
@@ -202,7 +202,7 @@ function customerLogout(req, res) {
 	    res.redirect("/accounts/" + employeeId);
 	  } else {
 
-	      const url = "https://ims-heroku-backend.herokuapp.com/customers/logout/" + userName;
+	      const url = "https://ims-backend-mongodb.herokuapp.com/customers/logout/" + userName;
 	      var options = {
 	        method: 'PUT',
 	        headers: {
@@ -245,7 +245,7 @@ function createTransaction(req, res) {
 	  };
 
 	  const jsonData = JSON.stringify(data);
-	  const baseUrl = "https://ims-heroku-backend.herokuapp.com/transactions/";
+	  const baseUrl = "https://ims-backend-mongodb.herokuapp.com/transactions/";
 	  const url = baseUrl + employeeId;
 
 	  var options = {
@@ -267,7 +267,7 @@ function createTransaction(req, res) {
 	          let newTransaction = JSON.parse(data);
 	          currentTransactions.push(newTransaction);
 	          });
-	      
+
 	    }
 	    res.redirect("/accounts/" + employeeId);
 	  });
@@ -286,8 +286,8 @@ function createTransaction(req, res) {
 function deleteTransaction(req, res) {
 	let employeeId = req.params.employeeId;
 	let transactionId = req.params.transactionId;
-	  
-	  const baseUrl = "https://ims-heroku-backend.herokuapp.com/transactions/";
+
+	  const baseUrl = "https://ims-backend-mongodb.herokuapp.com/transactions/";
 	  const url = baseUrl + transactionId + "/" + employeeId;
 
 	  var options = {
@@ -302,7 +302,7 @@ function deleteTransaction(req, res) {
 	    	response.on("data", function(data) {
 		        accountMessage = JSON.parse(data).message;
 		    });
-	    } 
+	    }
 	    else {
 	    	let currentTransactions = getCurrentTransactions(employeeId);
 	    	  let deletedTransaction = null;
@@ -332,18 +332,18 @@ function deleteTransaction(req, res) {
  * @returns
  */
 function getTransactions(req, res) {
-	
+
 	  const employeeId = req.params.employeeId;
 
 	  // convert the input values to javascript object
 	    const data = {
 	      userName: getCustomerUserName(employeeId)
 	    };
-	    
+
 	    // convert the javascript object to JSON
 	    const jsonData = JSON.stringify(data);
 
-	    const url = "https://ims-heroku-backend.herokuapp.com/customers/get/" + employeeId;
+	    const url = "https://ims-backend-mongodb.herokuapp.com/customers/get/" + employeeId;
 
 	    var options = {
 	      method: 'GET',
