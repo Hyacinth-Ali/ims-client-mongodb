@@ -1,6 +1,6 @@
 
 
-# ims-project
+# ims-client-mongodb
 
 
 

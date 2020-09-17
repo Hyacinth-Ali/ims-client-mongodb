@@ -11,7 +11,7 @@ function getProducts(req, res) {
 
 	  let id = req.params.employeeId;
 	  // fetch products
-	  const url = "https://ims-heroku-backend.herokuapp.com/products/" + id;
+	  const url = "https://ims-backend-mongodb.herokuapp.com/products/" + id;
 
 	  var options = {
 	    method: 'GET',
@@ -21,14 +21,40 @@ function getProducts(req, res) {
 	    }
 	  };
 
-	  const request = https.request(url, options, function(response) {
+		// req.on('data', function(data) {
+		//   chunks.push(data);
+		// }).on('end', function() {
+		//   let data   = Buffer.concat(chunks);
+		//   let schema = JSON.parse(data);
+		//   ...
+		// });
+
+		// start of new code
+		let result = "";
+		const request = https.request(url, options, function(response) {
 	    response.on("data", function(data) {
-	      products = JSON.parse(data);
+				result += data;
+			});
+			response.on("end", function(err) {
+				try {
+					products = JSON.parse(result);
+				} catch (e) {
+					console.error(e);
+				} 
 	    });
 	    res.redirect("/get/products/" + id);
 	  });
 	  request.end();
 	}
+	// old code
+	//   const request = https.request(url, options, function(response) {
+	//     response.on("data", function(data) {
+	//       products = JSON.parse(data);
+	//     });
+	//     res.redirect("/get/products/" + id);
+	//   });
+	//   request.end();
+	// }
 
 function renderProducts(req, res) {
 
@@ -64,7 +90,7 @@ function addProduct(req, res) {
 	  // convert the javascript object to JSON
 	  const jsonData = JSON.stringify(data);
 
-	  const url = "https://ims-heroku-backend.herokuapp.com/products/" + employeeId;
+	  const url = "https://ims-backend-mongodb.herokuapp.com/products/" + employeeId;
 
 	  var options = {
 	    method: 'POST',
@@ -97,7 +123,7 @@ function updateProduct(req, res) {
 	  const p = req.body.productPrice;
 	  const newQuantity = req.body.newQuantity;
 	  const quantity = Number(q) + Number(newQuantity);
-	  
+
 	  // convert the input values to javascript object
 	  const data = {
 	    name: name,
@@ -107,7 +133,7 @@ function updateProduct(req, res) {
 
 	  // convert the javascript object to JSON
 	  const jsonData = JSON.stringify(data);
-	  let baseUrl = "https://ims-heroku-backend.herokuapp.com/products";
+	  let baseUrl = "https://ims-backend-mongodb.herokuapp.com/products";
 	  const url = baseUrl + "/" + id + "/" + name;
 	 var options = {
 	    method: 'PUT',
@@ -147,7 +173,7 @@ function deleteProduct(req, res) {
 
 	  // convert the javascript object to JSON
 	  const jsonData = JSON.stringify(data);
-	  let baseUrl = "https://ims-heroku-backend.herokuapp.com/products/";
+	  let baseUrl = "https://ims-backend-mongodb.herokuapp.com/products/";
 	  const url = baseUrl + id;
 	   var options = {
 	    method: 'DELETE',

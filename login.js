@@ -32,7 +32,7 @@ router.post("/", function(req, res) {
   // convert the javascript object to JSON
   const jsonData = JSON.stringify(data);
 
-  const url = "https://ims-heroku-backend.herokuapp.com/employees";
+  const url = "https://ims-backend-mongodb.herokuapp.com/employees";
 
   var options = {
     method: 'GET',
