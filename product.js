@@ -21,14 +21,6 @@ function getProducts(req, res) {
 	    }
 	  };
 
-		// req.on('data', function(data) {
-		//   chunks.push(data);
-		// }).on('end', function() {
-		//   let data   = Buffer.concat(chunks);
-		//   let schema = JSON.parse(data);
-		//   ...
-		// });
-
 		// start of new code
 		let result = "";
 		const request = https.request(url, options, function(response) {
@@ -40,21 +32,12 @@ function getProducts(req, res) {
 					products = JSON.parse(result);
 				} catch (e) {
 					console.error(e);
-				} 
+				}
 	    });
 	    res.redirect("/get/products/" + id);
 	  });
 	  request.end();
 	}
-	// old code
-	//   const request = https.request(url, options, function(response) {
-	//     response.on("data", function(data) {
-	//       products = JSON.parse(data);
-	//     });
-	//     res.redirect("/get/products/" + id);
-	//   });
-	//   request.end();
-	// }
 
 function renderProducts(req, res) {
 
@@ -100,10 +83,18 @@ function addProduct(req, res) {
 	    }
 	  };
 
+		let result = "";
 	  const request = https.request(url, options, function(response) {
 	    if (response.statusCode !== 200) {
 	      response.on("data", function(data) {
-	        productMessage = JSON.parse(data).message;
+					result += data;
+				});
+				response.on("end", function(err) {
+					try {
+						productMessage = JSON.parse(result).message;
+					} catch (e) {
+						console.error(e);
+					}
 	      });
 	    }
 	    res.redirect("/products/" + employeeId);
@@ -143,10 +134,18 @@ function updateProduct(req, res) {
 	    }
 	  };
 
+		let result = "";
 	  const request = https.request(url, options, function(response) {
 	    if (response.statusCode !== 200) {
 	      response.on("data", function(data) {
-	        productMessage = JSON.parse(data).message;
+					result += data;
+				});
+				response.on("end", function(err) {
+					try {
+						productMessage = JSON.parse(result).message;
+					} catch (e) {
+						console.error(e);
+					}
 	      });
 	    } else {
 	    	productMessage = "SUCCESS";
@@ -183,10 +182,18 @@ function deleteProduct(req, res) {
 	    }
 	  };
 
+		let result = "";
 	  const request = https.request(url, options, function(response) {
 	    if (response.statusCode !== 200) {
 	      response.on("data", function(data) {
-	        productMessage = JSON.parse(data).message;
+					result += data;
+				});
+				response.on("end", function(err) {
+					try {
+						productMessage = JSON.parse(result).message;
+					} catch (e) {
+						console.error(e);
+					}
 	      });
 	    } else {
 	    	productMessage = "SUCCESS";
