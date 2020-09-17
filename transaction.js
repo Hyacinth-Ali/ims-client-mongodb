@@ -47,16 +47,33 @@ function getTransaction(req, res) {
 	    }
 	  };
 
+    let result = "";
 	  const request = https.request(url, options, function(response) {
 	    if (response.statusCode !== 200) {
-	      transactionMessage = JSON.parse(data).message;
+        response.on("data", function(data) {
+          result += data;
+        });
+        response.on("end", function(err) {
+          try {
+            transactionMessage = JSON.parse(result).message;
+          } catch (e) {
+            console.error(e);
+          }
+        });
 	    } else {
+        let result = "";
 	      response.on("data", function(data) {
-	        let transaction = JSON.parse(data);
-	        console.log(transaction);
-	        customerUserName = userName;
-	        transactions.delete(userName);
-	        transactions.set(userName, transaction);
+          result += data;
+        });
+        response.on("end", function(err) {
+          try {
+            let transaction = JSON.parse(result);
+  	        customerUserName = userName;
+  	        transactions.delete(userName);
+  	        transactions.set(userName, transaction);
+          } catch (e) {
+            console.error(e);
+          }
 	      });
 	    }
 	    res.redirect("/transaction/products/" + employeeId);
@@ -80,9 +97,17 @@ function getTransactionProducts(req, res) {
 	    }
 	  };
 
+    let result = "";
 	  const request = https.request(url, options, function(response) {
 	    response.on("data", function(data) {
-	      products = JSON.parse(data);
+        result += data;
+      });
+      response.on("end", function(err){
+        try {
+          products = JSON.parse(result);
+        } catch (e) {
+          console.error(e);
+        }
 	    });
 	    res.redirect("/transaction/" + employeeId + "/" + customerUserName);
 	  });
@@ -149,19 +174,20 @@ function addTransactionProduct(req, res) {
 	    }
 	  };
 
+    let result = "";
 	  const request = https.request(url, options, function(response) {
 	    if (response.statusCode !== 200) {
 	      response.on("data", function(data) {
-	        transactionMessage = JSON.parse(data).message;
+          result += data;
+        });
+        response.on("end", function(err) {
+          try {
+            transactionMessage = JSON.parse(result).message;
+          } catch (e) {
+            console.error(e);
+          }
 	      });
 	    }
-//	    else {
-//	    	response.on("data", function(data) {
-//	    		let currentTransaction = getCurrentTransaction(customerUserName);
-//	    		let currentProductTransactions = currentTransaction.pTransactions;
-//	    		currentProductTransactions.push(JSON.parse(data));
-//		      });
-//	    }
 	    res.redirect("/get/transaction/" + customerUserName + "/" +
 	    		employeeId + "/" + transactionId);
 	  });
@@ -196,10 +222,18 @@ function updateProductTransaction(req, res) {
 	    }
 	  };
 
+    let result = "";
 	  const request = https.request(url, options, function(response) {
 	    if (response.statusCode !== 200) {
 	      response.on("data", function(data) {
-	        transactionMessage = JSON.parse(data).message;
+          result += data;
+        });
+        response.on("end", function(err) {
+          try {
+            transactionMessage = JSON.parse(result).message;
+          } catch (e) {
+            console.error(e);
+          }
 	      });
 	    }
 	    res.redirect("/get/transaction/" + customerUserName + "/" +
@@ -227,10 +261,18 @@ function removeProductTransaction(req, res) {
 	    }
 	  };
 
+    let result = "";
 	  const request = https.request(url, options, function(response) {
 	    if (response.statusCode !== 200) {
 	      response.on("data", function(data) {
-	        transactionMessage = JSON.parse(data).message;
+          result += data;
+        });
+        response.on("end", function(err) {
+          try {
+            transactionMessage = JSON.parse(result).message;
+          } catch (e) {
+            console.error(e);
+          }
 	      });
 	    }
 	    res.redirect("/get/transaction/" + customerUserName + "/" +
@@ -262,10 +304,18 @@ function payForTransaction(req, res) {
 	    }
 	  };
 
+    let result = "";
 	  const request = https.request(url, options, function(response) {
 	    if (response.statusCode !== 200) {
 	      response.on("data", function(data) {
-	        transactionMessage = JSON.parse(data).message;
+          result += data;
+        });
+        response.on("end", function(err) {
+          try {
+            transactionMessage = JSON.parse(result).message;
+          } catch (e) {
+            console.error(e);
+          }
 	      });
 	    }
 	    res.redirect("/get/transaction/" + customerUserName + "/" +
@@ -292,11 +342,18 @@ function finalizeTransaction(req, res) {
 	    }
 	  };
 
+    let result = "";
 	  const request = https.request(url, options, function(response) {
 	    if (response.statusCode !== 200) {
 	      response.on("data", function(data) {
-	        transactionMessage = JSON.parse(data).message;
-	        console.log(transactionMessage);
+          result += "";
+        });
+        response.on("end", function(err) {
+          try {
+            transactionMessage = JSON.parse(result).message;
+          } catch (e) {
+            console.error(e);
+          }
 	      });
 	    } else {
 	    	transactionMessage = "SUCCESS";

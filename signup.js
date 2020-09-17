@@ -48,10 +48,18 @@ router.post("/signup", function(req, res) {
     }
   };
 
+  let result = "";
   const request = https.request(url, options, function(response) {
     if (response.statusCode !== 200) {
     	response.on("data", function(data){
-    		signupMessage = JSON.parse(data).message;
+        result += data;
+      });
+      response.on("end", function(err) {
+        try {
+          signupMessage = JSON.parse(result).message;
+        } catch (e) {
+          console.error(e);
+        } 
     		res.redirect("/signup");
     	});
     } else {
