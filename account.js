@@ -10,7 +10,7 @@ let transactions = new Map();
 let customerUserNames = new Map();
 let totalAmounts = new Map();
 
-function getCustomerName(employeeId){
+function getCustomerName(employeeId) {
 
   let returnValue = null;
   if (customers.size !== 0) {
@@ -19,7 +19,7 @@ function getCustomerName(employeeId){
   return returnValue;
 }
 
-function getTotalAmount(userName){
+function getTotalAmount(userName) {
   let returnValue = 0;
   if (totalAmounts.size !== 0) {
     returnValue = totalAmounts.get(userName);
@@ -28,14 +28,14 @@ function getTotalAmount(userName){
 }
 
 function getCustomerUserName(employeeId) {
-	 let returnValue = null;
-	  if (customerUserNames.size !== 0) {
-	    returnValue = customerUserNames.get(employeeId);
-	  }
-	  return returnValue;
+  let returnValue = null;
+  if (customerUserNames.size !== 0) {
+    returnValue = customerUserNames.get(employeeId);
+  }
+  return returnValue;
 }
 
-function getCurrentTransactions(employeeId){
+function getCurrentTransactions(employeeId) {
   let returnValue = null;
   if (transactions.size !== 0) {
     returnValue = transactions.get(employeeId);
@@ -50,25 +50,25 @@ function getCurrentTransactions(employeeId){
  * @returns
  */
 function renderAccountPage(req, res) {
-	  //customerLastName
-	  let id = req.params.employeeId;
-	  res.render("accounts", {
-	    etid: id,
-	    customerLoginId: id,
-	    customerLogoutId: id,
-	    employeeId: id,
-	    totalAmount: getTotalAmount(getCustomerUserName(id)),
-	    customerUserName: getCustomerUserName(id),
-	    transactions: getCurrentTransactions(id),
-	    customerName: getCustomerName(id),
-	    accountMessage: accountMessage,
-	    registerId: id,
-	    homeLink: "/home/" + id,
-	    productLink: "/products/" + id,
-	    accountLink: "/accounts/" + id
-	  });
-	  accountMessage = "";
-	}
+  //customerLastName
+  let id = req.params.employeeId;
+  res.render("accounts", {
+    etid: id,
+    customerLoginId: id,
+    customerLogoutId: id,
+    employeeId: id,
+    totalAmount: getTotalAmount(getCustomerUserName(id)),
+    customerUserName: getCustomerUserName(id),
+    transactions: getCurrentTransactions(id),
+    customerName: getCustomerName(id),
+    accountMessage: accountMessage,
+    registerId: id,
+    homeLink: "/home/" + id,
+    productLink: "/products/" + id,
+    accountLink: "/accounts/" + id
+  });
+  accountMessage = "";
+}
 
 /**
  * registers a customer
@@ -78,48 +78,56 @@ function renderAccountPage(req, res) {
  */
 function registerCustomer(req, res) {
 
-	  ///retrieve value from html form
-	  const employeeId = req.params.employeeId;
-	  const fName = req.body.customerFirstName;
-	  const lName = req.body.customerLastName;
-	  const customerId = req.body.customerId;
-	  const phoneNumber = req.body.phoneNumber;
+  ///retrieve value from html form
+  const employeeId = req.params.employeeId;
+  const fName = req.body.customerFirstName;
+  const lName = req.body.customerLastName;
+  const customerId = req.body.customerId;
+  const phoneNumber = req.body.phoneNumber;
 
-	  // convert the input values to javascript object
-	  const data = {
-	    firstName: fName,
-	    lastName: lName,
-	    userName: customerId,
-	    phoneNumber: phoneNumber
-	  };
-	  // res.redirect("/products");
-	  // convert the javascript object to JSON
-	  const jsonData = JSON.stringify(data);
+  // convert the input values to javascript object
+  const data = {
+    firstName: fName,
+    lastName: lName,
+    userName: customerId,
+    phoneNumber: phoneNumber
+  };
+  // res.redirect("/products");
+  // convert the javascript object to JSON
+  const jsonData = JSON.stringify(data);
 
-	  const url = "https://ims-heroku-backend.herokuapp.com/customers/" + employeeId;
+  const url = "https://ims-backend-mongodb.herokuapp.com/customers/" + employeeId;
 
-	  var options = {
-	    method: 'POST',
-	    headers: {
-	      'Content-Type': 'application/json',
-	      'Content-Length': jsonData.length
-	    }
-	  };
+  var options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': jsonData.length
+    }
+  };
 
-	  const request = https.request(url, options, function(response) {
-	    if (response.statusCode !== 200) {
-	      response.on("data", function(data) {
-	        accountMessage = JSON.parse(data).message;
-	      });
-	    } else {
-	      accountMessage = "SUCCESS";
-	    }
-	    res.redirect("/accounts/" + employeeId);
-	  });
-	  // getProducts(employeeId);
-	  request.write(jsonData);
-	  request.end();
-	}
+  let result = "";
+  const request = https.request(url, options, function(response) {
+    if (response.statusCode !== 200) {
+      response.on("data", function(data) {
+        result += data;
+      });
+      response.on("end", function(err) {
+        try {
+          accountMessage = JSON.parse(result).message;
+        } catch (e) {
+          console.error(e);
+        }
+      });
+    } else {
+      accountMessage = "SUCCESS";
+    }
+    res.redirect("/accounts/" + employeeId);
+  });
+  // getProducts(employeeId);
+  request.write(jsonData);
+  request.end();
+}
 
 /**
  * logs in customer
@@ -129,61 +137,72 @@ function registerCustomer(req, res) {
  */
 function customerLogin(req, res) {
 
-	  ///retrieve value from html form
-	  const employeeId = req.params.employeeId;
-	  const cName = req.body.userName;
+  ///retrieve value from html form
+  const employeeId = req.params.employeeId;
+  const cName = req.body.userName;
 
-	// convert the input values to javascript object
-	    const data = {
-	      userName: cName
-	    };
-	    // res.redirect("/products");
-	    // convert the javascript object to JSON
-	    const jsonData = JSON.stringify(data);
+  // convert the input values to javascript object
+  const data = {
+    userName: cName
+  };
+  // res.redirect("/products");
+  // convert the javascript object to JSON
+  const jsonData = JSON.stringify(data);
 
-	    const url = "https://ims-heroku-backend.herokuapp.com/customers/get/" + employeeId;
+  const url = "https://ims-backend-mongodb.herokuapp.com/customers/get/" + employeeId;
 
-	    var options = {
-	      method: 'GET',
-	      headers: {
-	        'Content-Type': 'application/json',
-	        'Content-Length': jsonData.length
-	      }
-	    };
+  var options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': jsonData.length
+    }
+  };
 
-	    const request = https.request(url, options, function(response) {
-	      if (response.statusCode !== 200) {
-	        response.on("data", function(data) {
-	          accountMessage = JSON.parse(data).message;
-	        });
-	      } else {
-	        response.on("data", function(data) {
-	        	
-	        	// set customer user name
-	          let customerUserName = JSON.parse(data).userName;
-	          customerUserNames.set(employeeId, customerUserName);
-	          
-	          // set customer name
-	          let currentCustomerName = JSON.parse(data).firstName + " " +
-	          JSON.parse(data).lastName;
-	          customers.set(employeeId, currentCustomerName);
-	          
-	          // set Transactions
-	          let currentTransactions = JSON.parse(data).transactions;
-	          let totalAmount = 0;
-	          for (var i = 0; i < currentTransactions.length; i++) {
-	            totalAmount = totalAmount + currentTransactions[i].amountUnpaid;
-	          }
-	          totalAmounts.set(customerUserName, totalAmount);
-	          transactions.set(employeeId, currentTransactions);
-	        });
-	      }
-	      res.redirect("/accounts/" + employeeId);
-	    });
-	    // getProducts(employeeId);
-	    request.write(jsonData);
-	    request.end();
-	}
+  let result = "";
+  const request = https.request(url, options, function(response) {
+    if (response.statusCode !== 200) {
+      response.on("data", function(data) {
+        result += data;
+      });
+      response.on("end", function(err) {
+        try {
+          accountMessage = JSON.parse(result).message;
+        } catch (e) {
+          console.error(e);
+        }
+      });
+    } else {
+      response.on("data", function(data) {
+        result += data;
+      });
+      response.on("end", function(err) {
+        let transactionDetail = JSON.parse(result);
+        // set customer user name
+        let customerUserName = transactionDetail.userName;
+        customerUserNames.set(employeeId, customerUserName);
+
+        // set customer name
+        let currentCustomerName = transactionDetail.firstName + " " +
+          transactionDetail.lastName;
+        customers.set(employeeId, currentCustomerName);
+
+        // set Transactions
+        let currentTransactions = transactionDetail.transactions;
+        let totalAmount = 0;
+        for (var i = 0; i < currentTransactions.length; i++) {
+          totalAmount = totalAmount + currentTransactions[i].amountUnpaid;
+        }
+        totalAmounts.set(customerUserName, totalAmount);
+        transactions.set(employeeId, currentTransactions);
+      });
+    }
+    res.redirect("/accounts/" + employeeId);
+  });
+  // getProducts(employeeId);
+  request.write(jsonData);
+  request.end();
+}
 
 /**
  * logs out a customer
@@ -193,41 +212,49 @@ function customerLogin(req, res) {
  */
 function customerLogout(req, res) {
 
-	  ///retrieve value from html form
-	  const employeeId = req.params.employeeId;
-	  const userName = req.body.userName;
+  ///retrieve value from html form
+  const employeeId = req.params.employeeId;
+  const userName = req.body.userName;
 
-	  if (userName === "") {
-	    accountMessage = "The user name cannot be empty";
-	    res.redirect("/accounts/" + employeeId);
-	  } else {
+  if (userName === "") {
+    accountMessage = "The user name cannot be empty";
+    res.redirect("/accounts/" + employeeId);
+  } else {
 
-	      const url = "https://ims-heroku-backend.herokuapp.com/customers/logout/" + userName;
-	      var options = {
-	        method: 'PUT',
-	        headers: {
-	          'Content-Type': 'application/json'
-	        }
-	      };
+    const url = "https://ims-backend-mongodb.herokuapp.com/customers/logout/" + userName;
+    var options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
 
-	      const request = https.request(url, options, function(response) {
-	        if (response.statusCode !== 200) {
-	          response.on("data", function(data) {
-	            accountMessage = JSON.parse(data).message;
-	          });
-	        } else {
-	          customers.delete(employeeId);
-	          transactions.delete(employeeId);
-	          totalAmounts.delete(userName);
-	          customerUserNames.delete(employeeId);
-	          accountMessage = "SUCCESS";
-	        }
-	        res.redirect("/accounts/" + employeeId);
-	      });
-	      request.end();
-	  } //end of else statement
+    let result = "";
+    const request = https.request(url, options, function(response) {
+      if (response.statusCode !== 200) {
+        response.on("data", function(data) {
+          result += data;
+        });
+        response.on("end", function(err) {
+          try {
+            accountMessage = JSON.parse(result).message;
+          } catch (e) {
+            console.error(e);
+          }
+        });
+      } else {
+        customers.delete(employeeId);
+        transactions.delete(employeeId);
+        totalAmounts.delete(userName);
+        customerUserNames.delete(employeeId);
+        accountMessage = "SUCCESS";
+      }
+      res.redirect("/accounts/" + employeeId);
+    });
+    request.end();
+  } //end of else statement
 
-	}
+}
 
 /**
  * Adds new transaction for a customer
@@ -237,45 +264,60 @@ function customerLogout(req, res) {
  */
 function createTransaction(req, res) {
 
-	  const employeeId = req.params.employeeId;
-	  const cUserName = req.params.customerUserName;
-	  // convert the input values to javascript object
-	  const data = {
-	    customerUserName: cUserName
-	  };
+  const employeeId = req.params.employeeId;
+  const cUserName = req.params.customerUserName;
+  // convert the input values to javascript object
+  const data = {
+    customerUserName: cUserName
+  };
 
-	  const jsonData = JSON.stringify(data);
-	  const baseUrl = "https://ims-heroku-backend.herokuapp.com/transactions/";
-	  const url = baseUrl + employeeId;
+  const jsonData = JSON.stringify(data);
+  const baseUrl = "https://ims-backend-mongodb.herokuapp.com/transactions/";
+  const url = baseUrl + employeeId;
 
-	  var options = {
-	    method: 'POST',
-	    headers: {
-	      'Content-Type': 'application/json',
-	      'Content-Length': jsonData.length
-	    }
-	  };
+  var options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': jsonData.length
+    }
+  };
 
-	  const request = https.request(url, options, function(response) {
-	    if (response.statusCode !== 200) {
-	      response.on("data", function(data) {
-	        accountMessage = JSON.parse(data).message;
-	      });
-	    } else {
-	      response.on("data", function(data) {
-	    	  let currentTransactions = getCurrentTransactions(employeeId);
-	          let newTransaction = JSON.parse(data);
-	          currentTransactions.push(newTransaction);
-	          });
-	      
-	    }
-	    res.redirect("/accounts/" + employeeId);
-	  });
-	  // getProducts(employeeId);
-	  request.write(jsonData);
-	  request.end();
+  let result = "";
+  const request = https.request(url, options, function(response) {
+    if (response.statusCode !== 200) {
+      response.on("data", function(data) {
+        result += data;
+      });
+      response.on("end", function(err) {
+        try {
+          accountMessage = JSON.parse(result).message;
+        } catch (e) {
+          console.error(e);
+        }
+      });
+    } else {
+      response.on("data", function(data) {
+        result += data;
+      });
+      response.on("end", function(err) {
+        try {
+          let currentTransactions = getCurrentTransactions(employeeId);
+          let newTransaction = JSON.parse(result);
+          currentTransactions.push(newTransaction);
+        } catch (e) {
+          console.error(e);
+        }
+      });
 
-	}
+    }
+    res.redirect("/accounts/" + employeeId);
+  });
+  // getProducts(employeeId);
+  request.write(jsonData);
+  request.end();
+
+}
 
 /**
  * Deletes a transaction
@@ -284,45 +326,52 @@ function createTransaction(req, res) {
  * @returns
  */
 function deleteTransaction(req, res) {
-	let employeeId = req.params.employeeId;
-	let transactionId = req.params.transactionId;
-	  
-	  const baseUrl = "https://ims-heroku-backend.herokuapp.com/transactions/";
-	  const url = baseUrl + transactionId + "/" + employeeId;
+  let employeeId = req.params.employeeId;
+  let transactionId = req.params.transactionId;
 
-	  var options = {
-	    method: 'DELETE',
-	    headers: {
-	      'Content-Type': 'application/json'
-	    }
-	  };
+  const baseUrl = "https://ims-backend-mongodb.herokuapp.com/transactions/";
+  const url = baseUrl + transactionId + "/" + employeeId;
 
-	  const request = https.request(url, options, function(response) {
-	    if (response.statusCode !== 200) {
-	    	response.on("data", function(data) {
-		        accountMessage = JSON.parse(data).message;
-		    });
-	    } 
-	    else {
-	    	let currentTransactions = getCurrentTransactions(employeeId);
-	    	  let deletedTransaction = null;
-	    	  let index = 0;
-	    	  for (var i = 0; i < currentTransactions.length; i++) {
-	    		  if (currentTransactions[i].transactionId === transactionId) {
-	    			  deletedTransaction = currentTransactions[i];
-	    			  index = i;
-	    			  break;
-	    		  }
-	    	  }
-	    	  if (deletedTransaction !== null) {
-	    		  currentTransactions.splice(index, 1);
-	    	  }
-	    	  transactions.set(employeeId, currentTransactions);
-	    }
-	    // renders page
-	    res.redirect("/accounts/" + employeeId);
-	  });
-	  request.end();
+  var options = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  let result = "";
+  const request = https.request(url, options, function(response) {
+    if (response.statusCode !== 200) {
+      response.on("data", function(data) {
+        result += data;
+      });
+      response.on("end", function(err) {
+        try {
+          accountMessage = JSON.parse(result).message;
+        } catch (e) {
+          console.error(e);
+        }
+      });
+    } else {
+      let currentTransactions = getCurrentTransactions(employeeId);
+      let deletedTransaction = null;
+      let index = 0;
+      for (var i = 0; i < currentTransactions.length; i++) {
+        if (currentTransactions[i].transactionId === transactionId) {
+          deletedTransaction = currentTransactions[i];
+          index = i;
+          break;
+        }
+      }
+      if (deletedTransaction !== null) {
+        currentTransactions.splice(index, 1);
+      }
+      transactions.set(employeeId, currentTransactions);
+    }
+    // renders page
+    res.redirect("/accounts/" + employeeId);
+  });
+  request.end();
 }
 
 /**
@@ -332,50 +381,66 @@ function deleteTransaction(req, res) {
  * @returns
  */
 function getTransactions(req, res) {
-	
-	  const employeeId = req.params.employeeId;
 
-	  // convert the input values to javascript object
-	    const data = {
-	      userName: getCustomerUserName(employeeId)
-	    };
-	    
-	    // convert the javascript object to JSON
-	    const jsonData = JSON.stringify(data);
+  const employeeId = req.params.employeeId;
 
-	    const url = "https://ims-heroku-backend.herokuapp.com/customers/get/" + employeeId;
+  // convert the input values to javascript object
+  const data = {
+    userName: getCustomerUserName(employeeId)
+  };
 
-	    var options = {
-	      method: 'GET',
-	      headers: {
-	        'Content-Type': 'application/json',
-	        'Content-Length': jsonData.length
-	      }
-	    };
+  // convert the javascript object to JSON
+  const jsonData = JSON.stringify(data);
 
-	    const request = https.request(url, options, function(response) {
-	      if (response.statusCode !== 200) {
-	        response.on("data", function(data) {
-	          accountMessage = JSON.parse(data).message;
-	        });
-	      } else {
-	        response.on("data", function(data) {
-	          // set Transactions
-	          let currentTransactions = JSON.parse(data).transactions;
-	          let totalAmount = 0;
-	          for (var i = 0; i < currentTransactions.length; i++) {
-	            totalAmount = totalAmount + currentTransactions[i].amountUnpaid;
-	          }
-	          let customerUserName = getCustomerUserName(employeeId);
-	          totalAmounts.set(customerUserName, totalAmount);
-	          transactions.set(employeeId, currentTransactions);
-	        });
-	      }
-	      res.redirect("/accounts/" + employeeId);
-	    });
-	    // getProducts(employeeId);
-	    request.write(jsonData);
-	    request.end();
+  const url = "https://ims-backend-mongodb.herokuapp.com/customers/get/" + employeeId;
+
+  var options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': jsonData.length
+    }
+  };
+
+  let result = "";
+  const request = https.request(url, options, function(response) {
+    if (response.statusCode !== 200) {
+      response.on("data", function(data) {
+        result += data;
+      });
+      response.on("end", function(err) {
+        try {
+          accountMessage = JSON.parse(result).message;
+        } catch (e) {
+          console.error(e);
+        }
+      });
+    } else {
+      response.on("data", function(data) {
+        result += data;
+      });
+      response.on("end", function(err) {
+        // set Transactions
+        let currentTransactions = "";
+        try {
+          currentTransactions = JSON.parse(result).transactions;
+        } catch (e) {
+
+        }
+        let totalAmount = 0;
+        for (var i = 0; i < currentTransactions.length; i++) {
+          totalAmount = totalAmount + currentTransactions[i].amountUnpaid;
+        }
+        let customerUserName = getCustomerUserName(employeeId);
+        totalAmounts.set(customerUserName, totalAmount);
+        transactions.set(employeeId, currentTransactions);
+      });
+    }
+    res.redirect("/accounts/" + employeeId);
+  });
+  // getProducts(employeeId);
+  request.write(jsonData);
+  request.end();
 }
 
 //Renders the account page

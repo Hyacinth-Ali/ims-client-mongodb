@@ -36,9 +36,9 @@ function getTransaction(req, res) {
 	  // convert the javascript object to JSON
 	  const jsonData = JSON.stringify(data);
 
-	  const baseUrl = "https://ims-heroku-backend.herokuapp.com/transactions/";
+	  const baseUrl = "https://ims-backend-mongodb.herokuapp.com/transactions/";
 	  const url = baseUrl + employeeId + "/" + transactionId;
-	 
+
 	  var options = {
 	    method: 'GET',
 	    headers: {
@@ -47,16 +47,33 @@ function getTransaction(req, res) {
 	    }
 	  };
 
+    let result = "";
 	  const request = https.request(url, options, function(response) {
 	    if (response.statusCode !== 200) {
-	      transactionMessage = JSON.parse(data).message;
+        response.on("data", function(data) {
+          result += data;
+        });
+        response.on("end", function(err) {
+          try {
+            transactionMessage = JSON.parse(result).message;
+          } catch (e) {
+            console.error(e);
+          }
+        });
 	    } else {
+        let result = "";
 	      response.on("data", function(data) {
-	        let transaction = JSON.parse(data);
-	        console.log(transaction);
-	        customerUserName = userName;
-	        transactions.delete(userName);
-	        transactions.set(userName, transaction);
+          result += data;
+        });
+        response.on("end", function(err) {
+          try {
+            let transaction = JSON.parse(result);
+  	        customerUserName = userName;
+  	        transactions.delete(userName);
+  	        transactions.set(userName, transaction);
+          } catch (e) {
+            console.error(e);
+          }
 	      });
 	    }
 	    res.redirect("/transaction/products/" + employeeId);
@@ -70,7 +87,7 @@ function getTransaction(req, res) {
  */
 function getTransactionProducts(req, res) {
 	  let employeeId = req.params.employeeId;
-	  const url = "https://ims-heroku-backend.herokuapp.com/products/" + employeeId;
+	  const url = "https://ims-backend-mongodb.herokuapp.com/products/" + employeeId;
 
 	  var options = {
 	    method: 'GET',
@@ -80,9 +97,17 @@ function getTransactionProducts(req, res) {
 	    }
 	  };
 
+    let result = "";
 	  const request = https.request(url, options, function(response) {
 	    response.on("data", function(data) {
-	      products = JSON.parse(data);
+        result += data;
+      });
+      response.on("end", function(err){
+        try {
+          products = JSON.parse(result);
+        } catch (e) {
+          console.error(e);
+        }
 	    });
 	    res.redirect("/transaction/" + employeeId + "/" + customerUserName);
 	  });
@@ -138,7 +163,7 @@ function addTransactionProduct(req, res) {
 	  };
 	  // convert the javascript object to JSON
 	  const jsonData = JSON.stringify(data);
-	  const baseUrl = "https://ims-heroku-backend.herokuapp.com/transactions/";
+	  const baseUrl = "https://ims-backend-mongodb.herokuapp.com/transactions/";
 	  const url = baseUrl + employeeId + "/" + transactionId;
 
 	  var options = {
@@ -149,20 +174,21 @@ function addTransactionProduct(req, res) {
 	    }
 	  };
 
+    let result = "";
 	  const request = https.request(url, options, function(response) {
 	    if (response.statusCode !== 200) {
 	      response.on("data", function(data) {
-	        transactionMessage = JSON.parse(data).message;
+          result += data;
+        });
+        response.on("end", function(err) {
+          try {
+            transactionMessage = JSON.parse(result).message;
+          } catch (e) {
+            console.error(e);
+          }
 	      });
-	    } 
-//	    else {
-//	    	response.on("data", function(data) {
-//	    		let currentTransaction = getCurrentTransaction(customerUserName);
-//	    		let currentProductTransactions = currentTransaction.pTransactions;
-//	    		currentProductTransactions.push(JSON.parse(data));
-//		      });
-//	    }
-	    res.redirect("/get/transaction/" + customerUserName + "/" + 
+	    }
+	    res.redirect("/get/transaction/" + customerUserName + "/" +
 	    		employeeId + "/" + transactionId);
 	  });
 	  // getProducts(employeeId);
@@ -185,7 +211,7 @@ function updateProductTransaction(req, res) {
 	  };
 	  // convert the javascript object to JSON
 	  const jsonData = JSON.stringify(data);
-	  const baseUrl = "https://ims-heroku-backend.herokuapp.com/transactions/";
+	  const baseUrl = "https://ims-backend-mongodb.herokuapp.com/transactions/";
 	  const url = baseUrl + employeeId + "/" + transactionId;
 
 	  var options = {
@@ -196,13 +222,21 @@ function updateProductTransaction(req, res) {
 	    }
 	  };
 
+    let result = "";
 	  const request = https.request(url, options, function(response) {
 	    if (response.statusCode !== 200) {
 	      response.on("data", function(data) {
-	        transactionMessage = JSON.parse(data).message;
+          result += data;
+        });
+        response.on("end", function(err) {
+          try {
+            transactionMessage = JSON.parse(result).message;
+          } catch (e) {
+            console.error(e);
+          }
 	      });
 	    }
-	    res.redirect("/get/transaction/" + customerUserName + "/" + 
+	    res.redirect("/get/transaction/" + customerUserName + "/" +
 	    		employeeId + "/" + transactionId);
 	  });
 	  // getProducts(employeeId);
@@ -217,7 +251,7 @@ function removeProductTransaction(req, res) {
 	  const employeeId = req.params.employeeId;
 	  const pName = req.body.productName;
 
-	  const baseUrl = "https://ims-heroku-backend.herokuapp.com/transactions/";
+	  const baseUrl = "https://ims-backend-mongodb.herokuapp.com/transactions/";
 	  const url = baseUrl + "/" + pName + "/" + transactionId + "/" + employeeId;
 
 	  var options = {
@@ -227,13 +261,21 @@ function removeProductTransaction(req, res) {
 	    }
 	  };
 
+    let result = "";
 	  const request = https.request(url, options, function(response) {
 	    if (response.statusCode !== 200) {
 	      response.on("data", function(data) {
-	        transactionMessage = JSON.parse(data).message;
+          result += data;
+        });
+        response.on("end", function(err) {
+          try {
+            transactionMessage = JSON.parse(result).message;
+          } catch (e) {
+            console.error(e);
+          }
 	      });
 	    }
-	    res.redirect("/get/transaction/" + customerUserName + "/" + 
+	    res.redirect("/get/transaction/" + customerUserName + "/" +
 	    		employeeId + "/" + transactionId);
 	  });
 	  request.end();
@@ -251,7 +293,7 @@ function payForTransaction(req, res) {
 	  };
 	  // convert the javascript object to JSON
 	  const jsonData = JSON.stringify(data);
-	  const baseUrl = "https://ims-heroku-backend.herokuapp.com/transactions/amount/";
+	  const baseUrl = "https://ims-backend-mongodb.herokuapp.com/transactions/amount/";
 	  const url = baseUrl + transactionId + "/" + employeeId;
 
 	  var options = {
@@ -262,13 +304,21 @@ function payForTransaction(req, res) {
 	    }
 	  };
 
+    let result = "";
 	  const request = https.request(url, options, function(response) {
 	    if (response.statusCode !== 200) {
 	      response.on("data", function(data) {
-	        transactionMessage = JSON.parse(data).message;
+          result += data;
+        });
+        response.on("end", function(err) {
+          try {
+            transactionMessage = JSON.parse(result).message;
+          } catch (e) {
+            console.error(e);
+          }
 	      });
 	    }
-	    res.redirect("/get/transaction/" + customerUserName + "/" + 
+	    res.redirect("/get/transaction/" + customerUserName + "/" +
 	    		employeeId + "/" + transactionId);
 	  });
 	  // getProducts(employeeId);
@@ -281,8 +331,8 @@ function finalizeTransaction(req, res) {
 	  customerUserName = req.params.customerUserName;
 	  transactionId = req.params.transactionId;
 	  const employeeId = req.params.employeeId;
-	  
-	  const baseUrl = "https://ims-heroku-backend.herokuapp.com/transactions/finalize/";
+
+	  const baseUrl = "https://ims-backend-mongodb.herokuapp.com/transactions/finalize/";
 	  const url = baseUrl + transactionId + "/" + employeeId;
 
 	  var options = {
@@ -292,16 +342,23 @@ function finalizeTransaction(req, res) {
 	    }
 	  };
 
+    let result = "";
 	  const request = https.request(url, options, function(response) {
 	    if (response.statusCode !== 200) {
 	      response.on("data", function(data) {
-	        transactionMessage = JSON.parse(data).message;
-	        console.log(transactionMessage);
+          result += "";
+        });
+        response.on("end", function(err) {
+          try {
+            transactionMessage = JSON.parse(result).message;
+          } catch (e) {
+            console.error(e);
+          }
 	      });
 	    } else {
 	    	transactionMessage = "SUCCESS";
 	    }
-	    res.redirect("/get/transaction/" + customerUserName + "/" + 
+	    res.redirect("/get/transaction/" + customerUserName + "/" +
 	    		employeeId + "/" + transactionId);
 	  });
 	  request.end();

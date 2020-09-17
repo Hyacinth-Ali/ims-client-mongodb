@@ -32,7 +32,7 @@ router.post("/", function(req, res) {
   // convert the javascript object to JSON
   const jsonData = JSON.stringify(data);
 
-  const url = "https://ims-heroku-backend.herokuapp.com/employees";
+  const url = "https://ims-backend-mongodb.herokuapp.com/employees";
 
   var options = {
     method: 'GET',
@@ -42,16 +42,33 @@ router.post("/", function(req, res) {
     }
   };
 
+  let result = "";
   const request = https.request(url, options, function(response) {
     if (response.statusCode !== 200) {
       response.on("data", function(data) {
-        errorMessage = JSON.parse(data).message;
+        result += data;
+      });
+      response.on("end", function(err) {
+        try {
+          errorMessage = JSON.parse(result).message;
+        } catch (e) {
+          console.error(e);
+        }
         console.log(errorMessage);
       });
     } else {
       response.on("data", function(data) {
-        employeeId = JSON.parse(data).employeeId;
-        employeeName = JSON.parse(data).firstName;
+        result += data;
+      });
+      response.on("end", function(err) {
+        let employeeDetail = "";
+        try {
+          employeeDetail = JSON.parse(result);
+        } catch (e) {
+
+        }
+        employeeId = employeeDetail.employeeId;
+        employeeName = employeeDetail.firstName;
       });
     }
     res.redirect("/home");
