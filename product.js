@@ -21,14 +21,40 @@ function getProducts(req, res) {
 	    }
 	  };
 
-	  const request = https.request(url, options, function(response) {
+		// req.on('data', function(data) {
+		//   chunks.push(data);
+		// }).on('end', function() {
+		//   let data   = Buffer.concat(chunks);
+		//   let schema = JSON.parse(data);
+		//   ...
+		// });
+
+		// start of new code
+		let result = "";
+		const request = https.request(url, options, function(response) {
 	    response.on("data", function(data) {
-	      products = JSON.parse(data);
+				result += data;
+			});
+			response.on("end", function(err) {
+				try {
+					products = JSON.parse(result);
+				} catch (e) {
+					console.error(e);
+				} 
 	    });
 	    res.redirect("/get/products/" + id);
 	  });
 	  request.end();
 	}
+	// old code
+	//   const request = https.request(url, options, function(response) {
+	//     response.on("data", function(data) {
+	//       products = JSON.parse(data);
+	//     });
+	//     res.redirect("/get/products/" + id);
+	//   });
+	//   request.end();
+	// }
 
 function renderProducts(req, res) {
 
