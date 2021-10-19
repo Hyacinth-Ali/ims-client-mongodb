@@ -1,7 +1,7 @@
 
 
 # ims-client-mongodb
-This is a front-end application for the management of inventories in a motorcycle store.
+This is a front-end application for the management of inventories in a motorcycle parts store. This is a personal project which targets a specific motorcycle parts store.
 
 
 ## Usage
