@@ -1,20 +1,7 @@
 
 
 # ims-client-mongodb
-This is a front-end application for the management of inventories in a motorcycle parts store. This is a personal project which targets a specific motorcycle parts store.
-
-
-## Usage
+This is a frontend application for the management of inventories in a motorcycle parts warehouse. This is a personal project which targets a specific motorcycle parts swarehouse to assist the vendors manage their inventories with ease.
 
 
 
-## Developing
-
-
-
-### Tools
-
-Created with [Nodeclipse](https://github.com/Nodeclipse/nodeclipse-1)
- ([Eclipse Marketplace](http://marketplace.eclipse.org/content/nodeclipse), [site](http://www.nodeclipse.org))   
-
-Nodeclipse is free open-source project that grows with your contributions.
